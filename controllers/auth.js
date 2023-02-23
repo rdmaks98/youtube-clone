@@ -5,15 +5,12 @@ import jwt from "jsonwebtoken"
 const authController = {
     async signup(req, res, next) {
         try {
-            let saltRounds = 10;
             let salt = bcrypt.genSaltSync(10);
             let hash = bcrypt.hashSync(req.body.password, salt)
             let newUser = new User({ ...req.body, password: hash });
             await newUser.save();
             console.log(req.body)
-            return res.status(200).send({
-                message: "user is created successfully"
-            })
+            return res.status(200).send("user is created successfully")
         } catch (err) {
             next(err);
         }
@@ -33,11 +30,9 @@ const authController = {
             const { password, ...others } = user._doc
             others.password = ""
             res.cookie("access_token", token, {
-                httpOnly:false
+                httpOnly:true
             }).status(200).json(others)
-            // return res.status(200).send({
-            //     message: "user is created successfully"
-            // })
+            
         } catch (err) {
             next(err);
         }

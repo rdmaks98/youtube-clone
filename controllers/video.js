@@ -3,17 +3,14 @@ import Video from "../models/Video.js";
 import {createError} from "../error.js"
 const videoController = {
     async addVideo(req, res, next) {
+        console.log(req,"woswqoi")
         try {
             const addVideo = new Video({ userId: req.user.id, ...req.body })
             await addVideo.save();
-            return res.status(200).json({
-                data: addVideo,
-                message:"video is added successfully"
-            })
+            return res.status(200).json(addVideo)
          }
         catch (err) {
-            console.log(err)
-            throw next(createError(400,err));
+          next(err);
         }
     },
 
@@ -28,17 +25,14 @@ const videoController = {
                     $set: req.body
                 },
                 { new: true });
-                res.status(200).json({
-                    data: updateRecord,
-                    message: "Video is updated Successfully"
-                });
+                res.status(200).json(updateRecord);
             }
             else {
                 return next(createError(403,"you can update only your videos here...."))
             }
          }
         catch (err) {
-            throw next(createError(400, err));
+            throw next(err);
         }
     },
 
@@ -50,16 +44,15 @@ const videoController = {
             }
             if (req.user.id === findRecord.userId) {
                 await Video.findByIdAndDelete(req.params.id);
-                res.status(200).json({
-                    message: "video has been deleted"
-                });
+                res.status(200).json("video deleted"
+                );
             }
             else {
                 return next(createError(403, "you can deleted only your videos here...."))
             }
          }
         catch (err) {
-            throw next(createError(400, err));
+            throw next(err);
         }
     },
 
@@ -70,13 +63,10 @@ const videoController = {
             {
                 return next(createError(404,"video is not found from this id"))
             }
-            return res.status(200).json({
-                data: findRecord,
-                messgae:"video are retrieve successfully"
-            })
+            return res.status(200).json(findRecord)
         }
         catch (err) {
-            throw next(createError(400, err));
+            throw next(err);
         }
     },
 
@@ -86,29 +76,25 @@ const videoController = {
             await Video.findByIdAndUpdate(req.params.id, {
                 $inc:{views:1}
             })
-            return res.status(200).json({
-                messgae: "video view has been incresed"
-            })
+            return res.status(200).json("video view has been incresed"
+            )
         }
         catch (err) {
-            throw next(createError(400, err));
+            throw next(err);
         }
     },
 
     async random(req, res, next) {
         try {
-            const findRecords = await Video.aggregate([{$sample:{size:40}}])
+            const findRecords = await Video.aggregate([{ $sample: { size : 40 } }])
             if (!findRecords) {
                 return next(createError(404, "video is not found"))
             }
-            return res.status(200).json({
-                data: findRecords,
-                messgae: "Random videos are retrieve successfully"
-            })
+            return res.status(200).json(findRecords)
            
         }
         catch (err) {
-            throw next(createError(400, err));
+            throw next(err);
         }
     },
 
@@ -119,13 +105,10 @@ const videoController = {
             if (!findRecords) {
                 return next(createError(404, "video is not found from this id"))
             }
-            return res.status(200).json({
-                data: findRecords,
-                messgae: "video are retrieve successfully"
-            })
+            return res.status(200).json(findRecords)
         }
         catch (err) {
-            throw next(createError(400,err));
+            throw next(err);
         }
     },
 
@@ -134,19 +117,16 @@ const videoController = {
             const user = await User.findById(req.user.id)
             const subscribeVideo = user.subscribedUsers
 
-            const listAll =await Promise.all(
+            const listAll =await 
                 subscribeVideo.map(async (channelId) => {
                     return await Video.find({userId:channelId})
                 })
-            )
+            
 
-            return res.status(200).json({
-                data: listAll.flat().sort((a,b) => b.createdAt - a.createdAt),
-                messgae: "video are retrieve successfully"
-            })
+            return res.status(200).json(listAll.flat().sort((a,b) => b.createdAt - a.createdAt))
         }
         catch (err) {
-            throw next(createError(400,err));
+            throw next(400,err);
         }
     },
 
@@ -156,10 +136,7 @@ const videoController = {
         const tags = lowerconvert?.split(",");
         try {
             const videos = await Video.find({ tags: { $in: tags } }).limit(20);
-            res.status(200).json({
-                data: videos,
-                message:"get videos by tag"
-            });
+            res.status(200).json(videos);
         } catch (err) {
             next(err);
         }
@@ -172,10 +149,7 @@ const videoController = {
             const videos = await Video.find({
                 title: { $regex: query, $options: "i" },
             }).limit(40);
-            res.status(200).json({
-                data: videos,
-                message: "search videos get successfully"
-            });
+            res.status(200).json(videos);
         } catch (err) {
             next(err);
         }

@@ -27,7 +27,7 @@ const userController = {
     if (req.params.id === req.user.id) {
       try {
         await User.findByIdAndDelete(req.params.id);
-        res.status(200).json({status:true,message:"User has been deleted."});
+        res.status(200).json("User has been deleted.");
       } catch (err) {
         return next(err);
       }
@@ -36,7 +36,7 @@ const userController = {
     }
   },
 
-  async getUSer(req, res) {
+  async getUSer(req, res,next) {
     try {
       const user = await User.findById(req.params.id)
       if (!user) {
@@ -45,7 +45,7 @@ const userController = {
       return res.status(200).json(user)
      }
     catch (err) {
-      next (err)
+      next(err)
     }
   },
 
@@ -57,9 +57,7 @@ const userController = {
       await User.findByIdAndUpdate(req.params.id, {
         $inc: { subscribers:1}
       })
-      return res.status(200).json({
-        message:"Subscription successfully"
-      })
+      return res.status(200).json("Subscription successfully")
      }
     catch (err) {
       next(err)
@@ -74,10 +72,7 @@ const userController = {
       await User.findByIdAndUpdate(req.params.id, {
         $inc: { subscribers: -1 }
       })
-      return res.status(200).json({
-        status: true,
-        message: "unSubscription successfully"
-      })
+      return res.status(200).json("unSubscription successfully")
      }
     catch (err) {
       next(err)
@@ -94,7 +89,7 @@ const userController = {
         $addToSet: { likes: id },
         $pull:{dislikes:id}
       })
-      res.status(200).json({message:"the video hase been likes addedd successfully"})
+      res.status(200).json("the video hase been likes addedd successfully")
      }
     catch (err) {
       next(err)

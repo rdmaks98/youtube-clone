@@ -13,7 +13,7 @@ router.put("/:id", Authentication, videoController.updateVideo)
 router.delete("/:id", Authentication, videoController.deleteVideo)
 
 // GET USER BY VIDEO
-router.get("/find/:id", Authentication, videoController.getVideo)
+router.get("/find/:id", videoController.getVideo)
 
 // [ - ] VIEW ADD IN VIDEO
 router.put("/view/:id", videoController.addView)
@@ -22,7 +22,7 @@ router.put("/view/:id", videoController.addView)
 router.get("/trend", videoController.trending)
 
 // RANDOM VIDEO
-router.get("/random", videoController.random)
+router.get("/random",videoController.random)
 
 // SUBSCRIBE USER BY VIDEO
 router.get("/subscribe", Authentication, videoController.subScriber)

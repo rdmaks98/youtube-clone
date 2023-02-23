@@ -8,14 +8,16 @@ import videoRoutes from "./routes/videos.js";
 import commentRoutes from "./routes/comment.js";
 import connect from "./database/index.js"
 import cookieParser from "cookie-parser";
-
+import cors from "cors";
 
 dotenv.config()
 const app = express();
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
-
+app.use(cors({
+    origin: '*'
+}));
 
 // declare routing based on module
 app.use("/api/auth", authRoutes)
@@ -30,7 +32,7 @@ app.use((err, req, res, next) => {
     return res.status(status).json({
         success: false,
         status,
-        message: message
+        message
     })
 })
 
