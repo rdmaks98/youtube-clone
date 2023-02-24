@@ -77,7 +77,7 @@ const Card = ({ type, video }) => {
           <Texts>
             <Title>{video.title}</Title>
             <ChannelName>{channel.name}</ChannelName>
-            <Info>{video.views} views •(video.createdAt)</Info>
+            <Info>{video.views} views •{video.createdAt}</Info>
           </Texts>
         </Details>
       </Container>

@@ -7,14 +7,13 @@ import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import Comments from "../components/Comments";
-import Card from "../components/Card";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { dislike, fetchFailure, fetchSuccess, like } from "../redux/videoSlice";
-import { format } from "timeago.js";
+// import { format } from "timeago.js";
 import { subscription } from "../redux/userSlice";
-
+import Recommandation from "../components/Recommandation";
 const Container = styled.div`
   display: flex;
   gap: 24px;
@@ -61,9 +60,6 @@ const Hr = styled.hr`
   border: 0.5px solid ${({ theme }) => theme.soft};
 `;
 
-const Recommendation = styled.div`
-  flex: 2;
-`;
 const Channel = styled.div`
   display: flex;
   justify-content: space-between;
@@ -157,7 +153,6 @@ const Video = () => {
       : await axios.put(`/users/subscribe/${channel._id}`);
     dispatch(subscription(channel._id));
   };
-
   return (
     <Container>
       <Content>
@@ -167,7 +162,7 @@ const Video = () => {
         <Title>{currentVideo?.title}</Title>
         <Details>
           <Info>
-            {currentVideo?.views} views • {format(currentVideo?.createdAt)}
+            {currentVideo?.views} views •{currentVideo?.createdAt}
           </Info>
           <Buttons>
             <Button onClick={handleLike}>
@@ -213,21 +208,7 @@ const Video = () => {
         <Hr />
         <Comments videoId={currentVideo?._id} />
       </Content>
-      {/* <Recommendation>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-        <Card type="sm"/>
-      </Recommendation> */}
+      <Recommandation tags={currentVideo?.tags} />
     </Container>
   );
 };

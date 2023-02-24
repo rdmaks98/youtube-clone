@@ -94,10 +94,12 @@ const {currentUser} = useSelector((state) => state.user)
             LamaTube
           </Logo>
         </Link>
+        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
         <Item>
           <HomeIcon />
           Home
-        </Item>
+          </Item>
+        </Link>
         <Link to="trends" style={{ textDecoration: "none",color:"inherit" }}>
 
         <Item>
